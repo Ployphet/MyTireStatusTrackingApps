@@ -1,0 +1,145 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "api": {
+          "name": "shared_sharepointonline"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "ppp_sharedsharepointonline_e8d4e"
+        },
+        "runtimeSource": "invoker"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "undefined",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "PowerAppV2",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "number": {
+                  "description": "Please enter a number",
+                  "title": "CardID",
+                  "type": "number",
+                  "x-ms-content-hint": "NUMBER",
+                  "x-ms-dynamically-added": true
+                },
+                "file": {
+                  "description": "Please select file or image",
+                  "title": "Img",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "contentBytes": {
+                      "type": "string",
+                      "format": "byte"
+                    }
+                  },
+                  "x-ms-content-hint": "FILE",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "number",
+                "file"
+              ]
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "5dcaf74e-a186-4f18-82aa-ccf77ca2e309"
+          }
+        }
+      },
+      "actions": {
+        "Create_new_folder_for_each_ID": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+              "table": "462f01bf-51d3-46cd-842b-b36ee3216721",
+              "parameters/path": "TireShippingPicture/@{triggerBody()?['number']}"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "CreateNewFolder",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "b50c2718-15ab-4158-aa54-7b06be9cbc5e"
+          }
+        },
+        "Create_image_file": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+              "folderPath": "/Shared Documents/TireShippingPicture/@{triggerBody()?['number']}",
+              "name": "@{triggerBody()?['file']?['name']}.jpg",
+              "body": "@base64ToBinary(triggerBody()?['file']?['contentBytes'])"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "CreateFile",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {
+            "Create_new_folder_for_each_ID": [
+              "Succeeded"
+            ]
+          },
+          "runtimeConfiguration": {
+            "contentTransfer": {
+              "transferMode": "Chunked"
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "e2651929-2b70-465b-aa33-cad12f19ea5b"
+          }
+        },
+        "Update_item": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+              "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+              "id": "@triggerBody()?['number']",
+              "item/CardImage1": "https://salesbridge.sharepoint.com/:f:/r/teams/BSCAP-BTMT430/Shared%20Documents/TireShippingPicture/@{triggerBody()?['number']}"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "PatchItem",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {
+            "Create_image_file": [
+              "Succeeded"
+            ]
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

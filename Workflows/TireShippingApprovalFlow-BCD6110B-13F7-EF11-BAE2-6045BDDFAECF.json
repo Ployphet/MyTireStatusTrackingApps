@@ -1,0 +1,521 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "invoker",
+        "connection": {},
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "invoker",
+        "connection": {},
+        "api": {
+          "name": "shared_approvals"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "invoker",
+        "connection": {},
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "undefined",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "145ccdb2-7653-43d2-b635-f07ec179ddd2"
+          },
+          "type": "Request",
+          "kind": "PowerAppV2",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "number": {
+                  "description": "Please enter a number",
+                  "title": "ShippingID",
+                  "type": "number",
+                  "x-ms-content-hint": "NUMBER",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "number"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_item": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "ad1292c0-a666-4ede-976e-28c5bd3fce99"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+              "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+              "id": "@triggerBody()?['number']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Condition": {
+          "actions": {
+            "Start_and_wait_for_an_approval_from_430_and_420_(Prototype_S2)": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "a3d415aa-37ce-4e70-bd41-b79145fa385d"
+              },
+              "type": "OpenApiConnectionWebhook",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_approvals",
+                  "operationId": "StartAndWaitForAnApproval",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+                },
+                "parameters": {
+                  "approvalType": "Sequential",
+                  "WebhookApprovalCreationInput/title": "Shipping approval request for @{outputs('Get_item')?['body/CardNumber']} (@{outputs('Get_item')?['body/TireClass']})",
+                  "WebhookApprovalCreationInput/steps": [
+                    {
+                      "assignedTo": "@outputs('Get_item')?['body/OData__x0034_30Mail']"
+                    },
+                    {
+                      "assignedTo": "@outputs('Get_item')?['body/OData__x0034_00Mail']"
+                    }
+                  ],
+                  "WebhookApprovalCreationInput/details": "Dear approvers,\n\nPlease consider approving the trial tire shipping request. The details of the shipped tires are below.\n\nShipping ID: @{outputs('Get_item')?['body/CardNumber']}\nCreated by: @{outputs('Get_item')?['body/CardCreatedBy']}\nAmount: @{outputs('Get_item')?['body/TireAmount']} tires\nSend to: @{outputs('Get_item')?['body/Receiver']}\nReceiver: @{outputs('Get_item')?['body/ReceiverPIC']}\nDetail: @{outputs('Get_item')?['body/ShippingDetail']}\nLink: @{outputs('Get_item')?['body/CardImage1']}\n\nYours sincerely,\n\n@{outputs('Get_item')?['body/CardCreatedBy']}",
+                  "WebhookApprovalCreationInput/enableNotifications": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Apply_to_each_(Confidential_S2)": {
+              "foreach": "@outputs('Start_and_wait_for_an_approval_from_430_and_420_(Prototype_S2)')?['body/responses']",
+              "actions": {
+                "Update_item_(Confidential_S2)": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "2e231592-a461-4f29-a8e1-c61c47377662"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "PatchItem",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                    },
+                    "parameters": {
+                      "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+                      "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+                      "id": "@triggerBody()?['number']",
+                      "item/CardStatus": "@items('Apply_to_each_(Confidential_S2)')?['approverResponse']",
+                      "item/ClosedDate": "@outputs('Start_and_wait_for_an_approval_from_430_and_420_(Prototype_S2)')?['body/completionDate']"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Start_and_wait_for_an_approval_from_430_and_420_(Prototype_S2)": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "684dd4fb-01e7-4828-a4ab-5eff2f31d91f"
+              },
+              "type": "Foreach"
+            }
+          },
+          "runAfter": {
+            "Get_item": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Start_and_wait_for_an_approval_from_430_(Prototype_S3_or_Control_spec.)": {
+                "runAfter": {},
+                "metadata": {
+                  "operationMetadataId": "cea3f8f5-b60a-4250-bbbb-362813e7fca6"
+                },
+                "type": "OpenApiConnectionWebhook",
+                "inputs": {
+                  "host": {
+                    "connectionName": "shared_approvals",
+                    "operationId": "StartAndWaitForAnApproval",
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+                  },
+                  "parameters": {
+                    "approvalType": "Sequential",
+                    "WebhookApprovalCreationInput/title": "Shipping approval request for @{outputs('Get_item')?['body/CardNumber']} (@{outputs('Get_item')?['body/TireClass']})",
+                    "WebhookApprovalCreationInput/steps": [
+                      {
+                        "assignedTo": "@outputs('Get_item')?['body/OData__x0034_30Mail']"
+                      }
+                    ],
+                    "WebhookApprovalCreationInput/details": "Dear approvers,\n\nPlease consider approving the trial tire shipping request. The details of the shipped tires are below.\n\nShipping ID: @{outputs('Get_item')?['body/CardNumber']}\nCreated by: @{outputs('Get_item')?['body/CardCreatedBy']}\nAmount: @{outputs('Get_item')?['body/TireAmount']} tires\nSend to: @{outputs('Get_item')?['body/Receiver']}\nReceiver: @{outputs('Get_item')?['body/ReceiverPIC']}\nDetail: @{outputs('Get_item')?['body/ShippingDetail']}\nLink: @{outputs('Get_item')?['body/CardImage1']}\n\nYours sincerely,\n\n@{outputs('Get_item')?['body/CardCreatedBy']}",
+                    "WebhookApprovalCreationInput/enableNotifications": true
+                  },
+                  "authentication": "@parameters('$authentication')"
+                }
+              },
+              "Apply_to_each_(Confidential_S3)": {
+                "foreach": "@outputs('Start_and_wait_for_an_approval_from_430_(Prototype_S3_or_Control_spec.)')?['body/responses']",
+                "actions": {
+                  "Update_item_(Confidential_S3)": {
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "e04b6b53-f760-4197-9c6e-d35d06911e93"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_sharepointonline",
+                        "operationId": "PatchItem",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                      },
+                      "parameters": {
+                        "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+                        "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+                        "id": "@triggerBody()?['number']",
+                        "item/CardStatus": "@items('Apply_to_each_(Confidential_S3)')?['approverResponse']",
+                        "item/ClosedDate": "@outputs('Start_and_wait_for_an_approval_from_430_(Prototype_S3_or_Control_spec.)')?['body/completionDate']"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  }
+                },
+                "runAfter": {
+                  "Start_and_wait_for_an_approval_from_430_(Prototype_S3_or_Control_spec.)": [
+                    "Succeeded"
+                  ]
+                },
+                "metadata": {
+                  "operationMetadataId": "062a495f-7ae3-49a9-9881-b701411a3597"
+                },
+                "type": "Foreach"
+              }
+            }
+          },
+          "expression": {
+            "and": [
+              {
+                "contains": [
+                  "@outputs('Get_item')?['body/TireClass']",
+                  "Prototype S2"
+                ]
+              }
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "1422e428-2c34-42c8-9d3d-20c22ad49051"
+          },
+          "type": "If"
+        },
+        "Start_and_wait_for_an_acknowledge_from_Accounting": {
+          "runAfter": {
+            "Condition": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "a4f1a9a0-e003-4401-9524-f6b7fd10c5a9"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_approvals",
+              "operationId": "StartAndWaitForAnApproval",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+            },
+            "parameters": {
+              "approvalType": "CustomResponseAwaitAll",
+              "WebhookApprovalCreationInput/responseOptions": [
+                "Acknowledge"
+              ],
+              "WebhookApprovalCreationInput/title": "Shipping acknowledge response for @{outputs('Get_item')?['body/CardNumber']} (@{outputs('Get_item')?['body/TireClass']})",
+              "WebhookApprovalCreationInput/assignedTo": "@{outputs('Get_item')?['body/AccountMail']};",
+              "WebhookApprovalCreationInput/details": "Dear @{outputs('Get_item')?['body/AccName']},\n\nTrial tires are shipped out BTMT. The details of the shipped tires are below.\n\nShipping ID: @{outputs('Get_item')?['body/CardNumber']}\nCreated by: @{outputs('Get_item')?['body/CardCreatedBy']}\nAmount: @{outputs('Get_item')?['body/TireAmount']} tires\nSend to: @{outputs('Get_item')?['body/Receiver']}\nReceiver: @{outputs('Get_item')?['body/ReceiverPIC']}\nDetail: @{outputs('Get_item')?['body/ShippingDetail']}\nLink: @{outputs('Get_item')?['body/CardImage1']}\n\nPlease click the \"Acknowledge\" button.\n\nYours sincerely,\n\n@{outputs('Get_item')?['body/CardCreatedBy']}",
+              "WebhookApprovalCreationInput/enableNotifications": true,
+              "WebhookApprovalCreationInput/enableReassignment": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Apply_to_Accounting": {
+          "foreach": "@outputs('Start_and_wait_for_an_acknowledge_from_Accounting')?['body/responses']",
+          "actions": {
+            "Update_response_from_Accounting": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "a454b30a-bd29-40f1-aec8-d3b8d3d1a591"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "PatchItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+                  "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+                  "id": "@triggerBody()['number']",
+                  "item/AccountingResponse": "@items('Apply_to_Accounting')?['approverResponse']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Start_and_wait_for_an_acknowledge_from_Accounting": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "adae1bb0-b8ad-4b75-bfb3-62be2c43159c"
+          },
+          "type": "Foreach"
+        },
+        "Start_and_wait_for_an_acknowledge_from_Export": {
+          "runAfter": {
+            "Condition": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "0070d7a8-8350-474a-beba-53680e2e3986"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_approvals",
+              "operationId": "StartAndWaitForAnApproval",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+            },
+            "parameters": {
+              "approvalType": "CustomResponseAwaitAll",
+              "WebhookApprovalCreationInput/responseOptions": [
+                "Acknowledge"
+              ],
+              "WebhookApprovalCreationInput/title": "Shipping acknowledge response for @{outputs('Get_item')?['body/CardNumber']} (@{outputs('Get_item')?['body/TireClass']})",
+              "WebhookApprovalCreationInput/assignedTo": "@{outputs('Get_item')?['body/ExportMail']};",
+              "WebhookApprovalCreationInput/details": "Dear @{outputs('Get_item')?['body/ExportName']},\n\nTrial tires are shipped out BTMT. The details of the shipped tires are below.\n\nShipping ID: @{outputs('Get_item')?['body/CardNumber']}\nCreated by: @{outputs('Get_item')?['body/CardCreatedBy']}\nAmount: @{outputs('Get_item')?['body/TireAmount']} tires\nSend to: @{outputs('Get_item')?['body/Receiver']}\nReceiver: @{outputs('Get_item')?['body/ReceiverPIC']}\nDetail: @{outputs('Get_item')?['body/ShippingDetail']}\nLink: @{outputs('Get_item')?['body/CardImage1']}\n\nPlease click the \"Acknowledge\" button.\n\nYours sincerely,\n\n@{outputs('Get_item')?['body/CardCreatedBy']}",
+              "WebhookApprovalCreationInput/enableNotifications": true,
+              "WebhookApprovalCreationInput/enableReassignment": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Apply_to_Export": {
+          "foreach": "@outputs('Start_and_wait_for_an_acknowledge_from_Export')?['body/responses']",
+          "actions": {
+            "Update_response_from_Export": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "d83a1ef8-1def-45cb-9dfd-de5a8b9917d0"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "PatchItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+                  "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+                  "id": "@triggerBody()['number']",
+                  "item/ExportResponse": "@items('Apply_to_Export')?['approverResponse']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Start_and_wait_for_an_acknowledge_from_Export": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "4e5e9277-44d4-472d-a91a-b06e4b680d03"
+          },
+          "type": "Foreach"
+        },
+        "Start_and_wait_for_a_confirmation_from_Requester": {
+          "runAfter": {
+            "Condition": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e6a76371-2f99-4de8-bbc9-918c6f1a4c50"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_approvals",
+              "operationId": "StartAndWaitForAnApproval",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+            },
+            "parameters": {
+              "approvalType": "CustomResponseAwaitAll",
+              "WebhookApprovalCreationInput/responseOptions": [
+                "Confirm shipping"
+              ],
+              "WebhookApprovalCreationInput/title": "Shipping acknowledge response for @{outputs('Get_item')?['body/CardNumber']} (@{outputs('Get_item')?['body/TireClass']})",
+              "WebhookApprovalCreationInput/assignedTo": "@{outputs('Get_item')?['body/RequesterMail']};",
+              "WebhookApprovalCreationInput/details": "Dear @{outputs('Get_item')?['body/Requester']},\n\nTrial tires are shipped out BTMT. The details of the shipped tires are below.\n\nShipping ID: @{outputs('Get_item')?['body/CardNumber']}\nCreated by: @{outputs('Get_item')?['body/CardCreatedBy']}\nAmount: @{outputs('Get_item')?['body/TireAmount']} tires\nSend to: @{outputs('Get_item')?['body/Receiver']}\nReceiver: @{outputs('Get_item')?['body/ReceiverPIC']}\nDetail: @{outputs('Get_item')?['body/ShippingDetail']}\n\nPlease click the \"Confirm shipping\" button.\n\nYours sincerely,\n\n@{outputs('Get_item')?['body/CardCreatedBy']}",
+              "WebhookApprovalCreationInput/enableNotifications": true,
+              "WebhookApprovalCreationInput/enableReassignment": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Apply_to_Requester": {
+          "foreach": "@outputs('Start_and_wait_for_a_confirmation_from_Requester')?['body/responses']",
+          "actions": {
+            "Update_response_from_Requester": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "00a3344f-11e8-4a89-b94c-bf5f1e4ff8d2"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "PatchItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+                  "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+                  "id": "@triggerBody()['number']",
+                  "item/RequesterResponse": "@items('Apply_to_Requester')?['approverResponse']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Start_and_wait_for_a_confirmation_from_Requester": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "fc61c60a-bc07-4a1e-9972-0fde5df98292"
+          },
+          "type": "Foreach"
+        },
+        "Send_an_email_(V2)": {
+          "runAfter": {
+            "Apply_to_Requester": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "675cb51a-cb6f-41a3-96c6-fc38980f119c"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_office365",
+              "operationId": "SendEmailV2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+            },
+            "parameters": {
+              "emailMessage/To": "ployphet.Veerasak@bridgestone.com; wuttipong.yodkham@bridgestone.com; amphoe.phonuan@bridgestone.com; jirawat.jitpechsakul@bridgestone.com; pornpot.puengpong@bridgestone.com; teerarat.yaisawang@bridgestone.com; tawatchai.srinamol@bridgestone.com; siwapon.pimsan@bridgestone.com",
+              "emailMessage/Subject": "Trial tire shipping-out notification for @{outputs('Get_item')?['body/CardNumber']}",
+              "emailMessage/Body": "<p class=\"editor-paragraph\">Dear all concerned,</p><br><p class=\"editor-paragraph\">Trial tires are shipped-out from BTMT to @{outputs('Get_item')?['body/Receiver']}. The details of shipping are below.</p><p class=\"editor-paragraph\"><br><i><b><strong class=\"editor-text-bold editor-text-italic\">Details</strong></b></i></p><p class=\"editor-paragraph\">Shipping ID: @{outputs('Get_item')?['body/CardNumber']}<br>Created by: @{outputs('Get_item')?['body/CardCreatedBy']}<br>Amount: @{outputs('Get_item')?['body/TireAmount']} tires<br>Send to: @{outputs('Get_item')?['body/Receiver']}<br>Receiver: @{outputs('Get_item')?['body/ReceiverPIC']}<br>Detail: @{outputs('Get_item')?['body/ShippingDetail']}</p><br><p class=\"editor-paragraph\">Yours sincerely,</p><br><p class=\"editor-paragraph\">@{outputs('Get_item')?['body/CardCreatedBy']}</p>",
+              "emailMessage/Importance": "High"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Start_and_wait_for_an_approval": {
+          "runAfter": {
+            "Condition": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "1bd47ac3-36e5-41a8-97f2-44656847a341"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_approvals",
+              "operationId": "StartAndWaitForAnApproval",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+            },
+            "parameters": {
+              "approvalType": "CustomResponseAwaitAll",
+              "WebhookApprovalCreationInput/responseOptions": [
+                "Confirm receiving"
+              ],
+              "WebhookApprovalCreationInput/title": "Shipping acknowledge response for @{outputs('Get_item')?['body/CardNumber']} (@{outputs('Get_item')?['body/TireClass']})",
+              "WebhookApprovalCreationInput/assignedTo": "@{outputs('Get_item')?['body/ReceiverMail']};",
+              "WebhookApprovalCreationInput/details": "Dear @{outputs('Get_item')?['body/ReceiverPIC']},\n\nTrial tires are shipped out BTMT. The details of the shipped tires are below.\n\nShipping ID: @{outputs('Get_item')?['body/CardNumber']}\nCreated by: @{outputs('Get_item')?['body/CardCreatedBy']}\nAmount: @{outputs('Get_item')?['body/TireAmount']} tires\nSend to: @{outputs('Get_item')?['body/Receiver']}\nReceiver: @{outputs('Get_item')?['body/ReceiverPIC']}\nDetail: @{outputs('Get_item')?['body/ShippingDetail']}\n\nOnce you receive the tires, please click the \"Confirm receiving\" button.\n\nYours sincerely,\n\n@{outputs('Get_item')?['body/CardCreatedBy']}",
+              "WebhookApprovalCreationInput/enableNotifications": true,
+              "WebhookApprovalCreationInput/enableReassignment": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Update_item": {
+          "runAfter": {
+            "Start_and_wait_for_an_approval": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "78637e24-6028-442c-b173-13a9e9d6e0c5"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "PatchItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430",
+              "table": "696ed404-02ad-4cc7-9627-88cef071258c",
+              "id": "@triggerBody()['number']",
+              "item/CardStatus": "Approve",
+              "item/ClosedDate": "@outputs('Start_and_wait_for_an_approval')?['body/completionDate']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

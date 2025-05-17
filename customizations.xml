@@ -1,0 +1,163 @@
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.25043.214" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.25043.00214">
+  <Entities></Entities>
+  <Roles></Roles>
+  <Workflows>
+    <Workflow WorkflowId="{9a95af82-6fe3-ef11-9342-000d3a6490fb}" Name="TeamMessageNotificationFlow">
+      <JsonFileName>/Workflows/TeamMessageNotificationFlow-9A95AF82-6FE3-EF11-9342-000D3A6490FB.json</JsonFileName>
+      <Type>1</Type>
+      <Subprocess>0</Subprocess>
+      <Category>5</Category>
+      <Mode>0</Mode>
+      <Scope>4</Scope>
+      <OnDemand>0</OnDemand>
+      <TriggerOnCreate>0</TriggerOnCreate>
+      <TriggerOnDelete>0</TriggerOnDelete>
+      <AsyncAutodelete>0</AsyncAutodelete>
+      <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+      <StateCode>1</StateCode>
+      <StatusCode>2</StatusCode>
+      <RunAs>1</RunAs>
+      <IsTransacted>1</IsTransacted>
+      <IntroducedVersion>1.0.0.0</IntroducedVersion>
+      <IsCustomizable>1</IsCustomizable>
+      <BusinessProcessType>0</BusinessProcessType>
+      <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+      <PrimaryEntity>none</PrimaryEntity>
+      <LocalizedNames>
+        <LocalizedName languagecode="1033" description="TeamMessageNotificationFlow" />
+      </LocalizedNames>
+    </Workflow>
+    <Workflow WorkflowId="{b6a07fe8-f1f4-ef11-be1f-000d3ab4363d}" Name="UploadImage2SharepointFlow">
+      <JsonFileName>/Workflows/UploadImage2SharepointFlow-B6A07FE8-F1F4-EF11-BE1F-000D3AB4363D.json</JsonFileName>
+      <Type>1</Type>
+      <Subprocess>0</Subprocess>
+      <Category>5</Category>
+      <Mode>0</Mode>
+      <Scope>4</Scope>
+      <OnDemand>0</OnDemand>
+      <TriggerOnCreate>0</TriggerOnCreate>
+      <TriggerOnDelete>0</TriggerOnDelete>
+      <AsyncAutodelete>0</AsyncAutodelete>
+      <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+      <StateCode>1</StateCode>
+      <StatusCode>2</StatusCode>
+      <RunAs>1</RunAs>
+      <IsTransacted>1</IsTransacted>
+      <IntroducedVersion>1.0.0.0</IntroducedVersion>
+      <IsCustomizable>1</IsCustomizable>
+      <BusinessProcessType>0</BusinessProcessType>
+      <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+      <ModernFlowType>0</ModernFlowType>
+      <PrimaryEntity>none</PrimaryEntity>
+      <LocalizedNames>
+        <LocalizedName languagecode="1033" description="UploadImage2SharepointFlow" />
+      </LocalizedNames>
+    </Workflow>
+    <Workflow WorkflowId="{bcd6110b-13f7-ef11-bae2-6045bddfaecf}" Name="TireShippingApprovalFlow">
+      <JsonFileName>/Workflows/TireShippingApprovalFlow-BCD6110B-13F7-EF11-BAE2-6045BDDFAECF.json</JsonFileName>
+      <Type>1</Type>
+      <Subprocess>0</Subprocess>
+      <Category>5</Category>
+      <Mode>0</Mode>
+      <Scope>4</Scope>
+      <OnDemand>0</OnDemand>
+      <TriggerOnCreate>0</TriggerOnCreate>
+      <TriggerOnDelete>0</TriggerOnDelete>
+      <AsyncAutodelete>0</AsyncAutodelete>
+      <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+      <StateCode>1</StateCode>
+      <StatusCode>2</StatusCode>
+      <RunAs>1</RunAs>
+      <IsTransacted>1</IsTransacted>
+      <IntroducedVersion>1.0.0.0</IntroducedVersion>
+      <IsCustomizable>1</IsCustomizable>
+      <BusinessProcessType>0</BusinessProcessType>
+      <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+      <ModernFlowType>0</ModernFlowType>
+      <PrimaryEntity>none</PrimaryEntity>
+      <LocalizedNames>
+        <LocalizedName languagecode="1033" description="TireShippingApprovalFlow" />
+      </LocalizedNames>
+    </Workflow>
+  </Workflows>
+  <FieldSecurityProfiles></FieldSecurityProfiles>
+  <Templates />
+  <EntityMaps />
+  <EntityRelationships />
+  <OrganizationSettings />
+  <optionsets />
+  <CustomControls />
+  <EntityDataProviders />
+  <CanvasApps>
+    <CanvasApp>
+      <Name>ppp_tirestatus_ff94b</Name>
+      <AppVersion>2025-04-28T08:12:52Z</AppVersion>
+      <Status>Ready</Status>
+      <CreatedByClientVersion>3.25042.10.0</CreatedByClientVersion>
+      <MinClientVersion>3.25042.10.0</MinClientVersion>
+      <Tags>{"primaryDeviceWidth":"2303","primaryDeviceHeight":"991","supportsPortrait":"true","supportsLandscape":"true","primaryFormFactor":"Tablet","showStatusBar":"false","publisherVersion":"3.25042.10","minimumRequiredApiVersion":"2.2.0","hasComponent":"false","hasUnlockedComponent":"false","isUnifiedRootApp":"false","sienaVersion":"20250421T091750Z-3.25034.15.0"}</Tags>
+      <IsCdsUpgraded>0</IsCdsUpgraded>
+      <GalleryItemId xsi:nil="true"></GalleryItemId>
+      <BackgroundColor>rgba(255, 255, 255, 1)</BackgroundColor>
+      <DisplayName>Tire status</DisplayName>
+      <Description>PPE tire status system</Description>
+      <CommitMessage xsi:nil="true"></CommitMessage>
+      <Publisher xsi:nil="true"></Publisher>
+      <AuthorizationReferences>[]</AuthorizationReferences>
+      <ConnectionReferences>{"9bae5f85-eab2-4597-a7d8-a0cbd302ae5e":{"id":"/providers/microsoft.powerapps/apis/shared_excel","displayName":"Excel","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1718/1.0.1718.3944/excel/icon.png","dataSources":["UserID","ProjectDetail","ProjectPurpose","DisposalType","ApprovalList"],"dependencies":["01e3f4a8-2ad8-490b-8d2a-1b39f302323d"],"dependents":[],"parameterHints":{"01e3f4a8-2ad8-490b-8d2a-1b39f302323d":{"value":"fileSource"}},"parameterHintsV2":{"fileSource":{"value":"01e3f4a8-2ad8-490b-8d2a-1b39f302323d"}},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{"b!WhDBahwWC0SuO1Nqb8eRixEtzCJHdvVFjh59coN2cfOwOCRPIT7ETrSuDwq9lDFM.013LJ3LP44XM3VDX7DZ5C3C6PUTN5CFBR5":{"dataSources":{"UserID":{"tableName":"UserID"}}},"b!WhDBahwWC0SuO1Nqb8eRixEtzCJHdvVFjh59coN2cfOwOCRPIT7ETrSuDwq9lDFM.013LJ3LP6AP6KZA7XPPFAZLXFHEHC4XATI":{"dataSources":{"ProjectDetail":{"tableName":"ProjectDetail"},"ProjectPurpose":{"tableName":"ProjectPurpose"},"DisposalType":{"tableName":"DisposalType"},"ApprovalList":{"tableName":"ApprovalList"}}}},"apiTier":"Standard","actions":["providers/PowerPlatform.Governance/Operations/Read","providers/PowerPlatform.Governance/Operations/Write","providers/PowerPlatform.Governance/Operations/Delete"]},"01e3f4a8-2ad8-490b-8d2a-1b39f302323d":{"id":"/providers/microsoft.powerapps/apis/shared_onedriveforbusiness","displayName":"OneDrive for Business","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1732/1.0.1732.4070/onedriveforbusiness/icon.png","dataSources":[],"dependencies":[],"dependents":["9bae5f85-eab2-4597-a7d8-a0cbd302ae5e"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard"},"45cf42d3-1af3-4146-b553-33b3cd903a23":{"id":"/providers/microsoft.powerapps/apis/shared_sharepointonline","displayName":"SharePoint","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1746/1.0.1746.4174/sharepointonline/icon.png","dataSources":["TireStatusTracking","ShippingCard","ScrapTireList","CuringTestTireHistory"],"dependencies":[],"dependents":["3d3a202a-a7be-4e82-a61f-eb46bff79c98","7a5954fe-516e-4337-9d25-c89c76f3d1dd"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{"https://salesbridge.sharepoint.com/teams/BSCAP-BTMT430":{"dataSources":{"TireStatusTracking":{"tableName":"bd5e20f3-5639-40d5-8966-7f5992c0ac52"},"ShippingCard":{"tableName":"696ed404-02ad-4cc7-9627-88cef071258c"},"ScrapTireList":{"tableName":"892a0543-da6a-466f-b61e-573b865cbefd"},"CuringTestTireHistory":{"tableName":"e8d34f1c-f41d-4940-9795-af5b91289511"}}}},"apiTier":"Standard","actions":["providers/PowerPlatform.Governance/Operations/Read","providers/PowerPlatform.Governance/Operations/Write"]},"ceb1c15d-6d4f-4552-967d-bed774171ec8":{"id":"/providers/microsoft.powerapps/apis/shared_office365","displayName":"Office 365 Outlook","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1747/1.0.1748.4181/office365/icon.png","dataSources":["Office365Outlook"],"dependencies":[],"dependents":["7a5954fe-516e-4337-9d25-c89c76f3d1dd"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard","actions":["SendEmailV2"]},"f96bb6b0-a9ad-4d6f-92e0-90a8965d8ea4":{"id":"/providers/microsoft.powerapps/apis/shared_teams","displayName":"Microsoft Teams","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1719/1.0.1719.3955/teams/icon.png","dataSources":["MicrosoftTeams"],"dependencies":[],"dependents":["39f88367-f000-4d47-aaf9-d10d067f9bbb"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard"},"c0a5b3d7-bf04-4f0f-871c-7fdb24b821d7":{"id":"/providers/microsoft.powerapps/apis/shared_office365users","displayName":"Office 365 Users","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1746/1.0.1746.4174/office365users/icon.png","dataSources":["Office365Users"],"dependencies":[],"dependents":[],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard","actions":["UserProfile_V2"]},"39f88367-f000-4d47-aaf9-d10d067f9bbb":{"id":"/providers/microsoft.powerapps/apis/shared_logicflows","displayName":"Logic flows","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1745/1.0.1745.4169/logicflows/icon.png","dataSources":["TeamMessageNotificationFlow"],"dependencies":["f96bb6b0-a9ad-4d6f-92e0-90a8965d8ea4"],"dependents":[],"parameterHints":{"workflowName":{"value":"e9d44f0b-c81b-4412-be5e-7357da6a5d21"},"workflowEntityId":{"value":"9a95af82-6fe3-ef11-9342-000d3a6490fb"},"workflowDisplayName":{"value":"TeamMessageNotificationFlow"},"f96bb6b0-a9ad-4d6f-92e0-90a8965d8ea4":{"value":"shared_teams"}},"parameterHintsV2":{"workflowName":{"value":"e9d44f0b-c81b-4412-be5e-7357da6a5d21"},"workflowEntityId":{"value":"9a95af82-6fe3-ef11-9342-000d3a6490fb"},"workflowDisplayName":{"value":"TeamMessageNotificationFlow"},"shared_teams":{"value":"f96bb6b0-a9ad-4d6f-92e0-90a8965d8ea4"}},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard","actions":["Run"]},"3d3a202a-a7be-4e82-a61f-eb46bff79c98":{"id":"/providers/microsoft.powerapps/apis/shared_logicflows","displayName":"Logic flows","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1745/1.0.1745.4169/logicflows/icon.png","dataSources":["UploadImage2SharepointFlow"],"dependencies":["45cf42d3-1af3-4146-b553-33b3cd903a23"],"dependents":[],"parameterHints":{"workflowName":{"value":"bb18a943-e8f9-4750-a218-bb7d4f621f6f"},"workflowEntityId":{"value":"b6a07fe8-f1f4-ef11-be1f-000d3ab4363d"},"workflowDisplayName":{"value":"UploadImage2SharepointFlow"},"45cf42d3-1af3-4146-b553-33b3cd903a23":{"value":"shared_sharepointonline"}},"parameterHintsV2":{"workflowName":{"value":"bb18a943-e8f9-4750-a218-bb7d4f621f6f"},"workflowEntityId":{"value":"b6a07fe8-f1f4-ef11-be1f-000d3ab4363d"},"workflowDisplayName":{"value":"UploadImage2SharepointFlow"},"shared_sharepointonline":{"value":"45cf42d3-1af3-4146-b553-33b3cd903a23"}},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard","actions":["Run"]},"7a5954fe-516e-4337-9d25-c89c76f3d1dd":{"id":"/providers/microsoft.powerapps/apis/shared_logicflows","displayName":"Logic flows","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1745/1.0.1745.4169/logicflows/icon.png","dataSources":["TireShippingApprovalFlow"],"dependencies":["45cf42d3-1af3-4146-b553-33b3cd903a23","6fed88fc-d3b3-4a6c-9726-87a4741fb9be","ceb1c15d-6d4f-4552-967d-bed774171ec8"],"dependents":[],"parameterHints":{"workflowName":{"value":"b8568d54-32e2-4741-8048-2f0ab030dcd8"},"workflowEntityId":{"value":"bcd6110b-13f7-ef11-bae2-6045bddfaecf"},"workflowDisplayName":{"value":"TireShippingApprovalFlow"},"45cf42d3-1af3-4146-b553-33b3cd903a23":{"value":"shared_sharepointonline"},"6fed88fc-d3b3-4a6c-9726-87a4741fb9be":{"value":"shared_approvals"},"ceb1c15d-6d4f-4552-967d-bed774171ec8":{"value":"shared_office365"}},"parameterHintsV2":{"workflowName":{"value":"b8568d54-32e2-4741-8048-2f0ab030dcd8"},"workflowEntityId":{"value":"bcd6110b-13f7-ef11-bae2-6045bddfaecf"},"workflowDisplayName":{"value":"TireShippingApprovalFlow"},"shared_sharepointonline":{"value":"45cf42d3-1af3-4146-b553-33b3cd903a23"},"shared_approvals":{"value":"6fed88fc-d3b3-4a6c-9726-87a4741fb9be"},"shared_office365":{"value":"ceb1c15d-6d4f-4552-967d-bed774171ec8"}},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard","actions":["Run"]},"6fed88fc-d3b3-4a6c-9726-87a4741fb9be":{"id":"/providers/microsoft.powerapps/apis/shared_approvals","displayName":"Approvals","iconUri":"https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1743/1.0.1743.4162/approvals/icon.png","dataSources":[],"dependencies":[],"dependents":["7a5954fe-516e-4337-9d25-c89c76f3d1dd"],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard"}}</ConnectionReferences>
+      <DatabaseReferences>{}</DatabaseReferences>
+      <AppComponents>[]</AppComponents>
+      <AppComponentDependencies>[]</AppComponentDependencies>
+      <CanConsumeAppPass>0</CanConsumeAppPass>
+      <CanvasAppType>0</CanvasAppType>
+      <BypassConsent>0</BypassConsent>
+      <AdminControlBypassConsent>0</AdminControlBypassConsent>
+      <EmbeddedApp xsi:nil="true"></EmbeddedApp>
+      <IntroducedVersion>1.0</IntroducedVersion>
+      <CdsDependencies>{"cdsdependencies":[{"dependencyid":"9a95af82-6fe3-ef11-9342-000d3a6490fb","componenttype":29,"componenttypeplatformname":"Workflow"},{"dependencyid":"b6a07fe8-f1f4-ef11-be1f-000d3ab4363d","componenttype":29,"componenttypeplatformname":"Workflow"},{"dependencyid":"bcd6110b-13f7-ef11-bae2-6045bddfaecf","componenttype":29,"componenttypeplatformname":"Workflow"}]}</CdsDependencies>
+      <IsCustomizable>1</IsCustomizable>
+      <BackgroundImageUri>/CanvasApps/ppp_tirestatus_ff94b_BackgroundImageUri</BackgroundImageUri>
+      <DocumentUri>/CanvasApps/ppp_tirestatus_ff94b_DocumentUri.msapp</DocumentUri>
+      <AdditionalUris>
+        <AdditionalUri>/CanvasApps/ppp_tirestatus_ff94b_AdditionalUris0_identity.json</AdditionalUri>
+      </AdditionalUris>
+    </CanvasApp>
+  </CanvasApps>
+  <connectionreferences>
+    <connectionreference connectionreferencelogicalname="ppp_sharedapprovals_fbf6a">
+      <connectionreferencedisplayname>Approvals Tirestatusapplication-fbf6a</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_approvals</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="ppp_sharedoffice365_aba76">
+      <connectionreferencedisplayname>Office 365 Outlook Tirestatusapplication-aba76</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_office365</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="ppp_sharedsharepointonline_e8d4e">
+      <connectionreferencedisplayname>SharePoint Tirestatusapplication-e8d4e</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_sharepointonline</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="ppp_sharedteams_09d81">
+      <connectionreferencedisplayname>Microsoft Teams Tirestatusapplication-09d81</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_teams</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+  </connectionreferences>
+  <Languages>
+    <Language>1033</Language>
+  </Languages>
+</ImportExportXml>

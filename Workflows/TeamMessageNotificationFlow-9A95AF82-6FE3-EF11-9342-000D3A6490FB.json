@@ -1,0 +1,131 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_teams": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "ppp_sharedteams_09d81"
+        },
+        "api": {
+          "name": "shared_teams"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "undefined",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "08e205f5-3bd9-4e72-ab62-0de691cf8c5a"
+          },
+          "type": "Request",
+          "kind": "PowerAppV2",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "description": "Please enter your input",
+                  "title": "Barcode",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_1": {
+                  "description": "Please enter your input",
+                  "title": "PIC",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_2": {
+                  "description": "Please enter your input",
+                  "title": "P.Code",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_3": {
+                  "description": "Please enter your input",
+                  "title": "TireNo",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_4": {
+                  "description": "Please enter your input",
+                  "title": "Type",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_6": {
+                  "description": "Please enter your input",
+                  "title": "Detail",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_5": {
+                  "description": "Please enter your input",
+                  "title": "Date",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "text_2",
+                "text_3",
+                "text_4",
+                "text_6",
+                "text_5"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Post_message_in_a_chat_or_channel": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "b0c356f1-a424-4f8d-9877-39dec882069f"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "poster": "Flow bot",
+              "location": "Group chat",
+              "body/recipient": "19:9b51698b672241dc9a24af181a033984@thread.v2",
+              "body/messageBody": "<p class=\"editor-paragraph\"><i><b><strong class=\"editor-text-bold editor-text-italic\" style=\"font-size: 18px;\">Tire sending notification!</strong></b></i></p><br><p class=\"editor-paragraph\"><b><strong class=\"editor-text-bold\">- P.code:</strong></b> @{triggerBody()?['text_2']}</p><p class=\"editor-paragraph\"><b><strong class=\"editor-text-bold\">- Barcode:</strong></b> @{triggerBody()?['text']}</p><p class=\"editor-paragraph\"><b><strong class=\"editor-text-bold\">- Sender:</strong></b> @{triggerBody()?['text_1']}</p><p class=\"editor-paragraph\"><b><strong class=\"editor-text-bold\">- Tire no.:</strong></b> @{triggerBody()?['text_3']}</p><p class=\"editor-paragraph\"><b><strong class=\"editor-text-bold\">- Use for:</strong></b> @{triggerBody()?['text_4']}</p><p class=\"editor-paragraph\"><b><strong class=\"editor-text-bold\">- Detail: </strong></b>@{triggerBody()?['text_6']}</p><p class=\"editor-paragraph\"><b><strong class=\"editor-text-bold\">- Date:</strong></b> @{triggerBody()?['text_5']}</p>"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+              "connectionName": "shared_teams",
+              "operationId": "PostMessageToConversation"
+            },
+            "authentication": {
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+              "type": "Raw"
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
